@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+        <meta content="yes" name="apple-mobile-web-app-capable" />
+        <meta content="block" name="apple-mobile-web-app-status-bar-style" />
+        <title>PM2.5和天气</title>
+        <link href="{{ static_url("css/bootstrap/bootstrap.min.css") }}" rel="stylesheet"/>
+        <link href="{{ static_url("css/propagation.css") }}" rel="stylesheet"/>
+    </head>
+    <body>
+        <div class="banner_width container-fluid">
+            <div class="row">
+                <div class="logo col-xs-4">
+                    <a class="text-left" href="#" ><img height="60%" width="60%" src="{{ static_url("img/logo/Icon-512_512.png") }}" alt="PM2.5和天气"/></a>
+                </div>
+                <div class="col-xs-4">
+                    <h5 class="text-center">{{ p['city'] }}</h5>
+                    <h5 class="text-center">PM2.5和天气</h5>
+                </div>
+                <div id="updatetime" class="col-xs-4">
+                    <h5 class="text-right">更新时间</h5>
+                    <p class="text-right">{{ p['updateTime'].split()[1] }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid banner_bg_level1 white-char">
+            <div class="row">
+                <div class="col-xs-3 col-xs-3">
+                    <h5 class="bo_info">空气质量</h5>
+                </div>
+                <div class="col-xs-3 col-xs-3 text-right">
+                    <h5 class="bo_info">{{ w['airCondition'] }}</h5>
+                </div>
+                <div class="col-xs-3 col-xs-3">
+                    <h5 class="bo_info">{{ w['weather'] }}</h5>
+                </div>
+                <div class="col-xs-3 col-xs-3 text-center">
+                    <img width="80%" src="{{ static_url("img/weather_icon/"+weather_icon+".png") }}" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-3">
+                    <p class="bo_name">AQI指数</p>
+                </div>
+                <div class="col-xs-3 text-right">
+                    <p class="bo_num">{{ p['aqi'] }}</p>
+                </div>
+                <div class="col-xs-3">
+                    <p class="bo_num">温度(℃)</p>
+                </div>
+                <div class="col-xs-3 text-right">
+                    <p class="bo_num">{{ w['temperature'] }}</p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-3">
+                    <p class="bo_name">PM2.5(μg/m³)</p>
+                </div>
+                <div class="col-xs-3 text-right">
+                    <p class="bo_num">{{ p['pm25'] }}</p>
+                </div>
+                <div class="col-xs-3">
+                    <p class="bo_name">PM10(μg/m³)</p>
+                </div>
+                <div class="col-xs-3 text-right">
+                    <p class="bo_num">{{ p['pm10'] }}</p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-3">
+                    <p class="bo_name">NO<sub>2</sub>(μg/m³)</p>
+                </div>
+                <div class="col-xs-3 text-right">
+                    <p class="bo_num">{{ p['no2'] }}</p>
+                </div>
+                <div class="col-xs-3">
+                    <p class="bo_name">SO<sub>2</sub>(μg/m³)</p>
+                </div>
+                <div class="col-xs-3 text-right">
+                    <p class="bo_num">{{ p['so2'] }}</p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-3">
+                    <p class="bo_name">锻炼指数</p>
+                </div>
+                <div class="col-xs-3 text-right">
+                    <p class="bo_info">{{ w['exerciseIndex'] }}</p>
+                </div>
+                <div class="col-xs-3">
+                    <p class="bo_name">穿衣指数</p>
+                </div>
+                <div class="col-xs-3 text-right">
+                    <p class="bo_info">{{ w['dressingIndex'] }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid">
+            <div class="api_flow row text-center">
+            <h4>{{ w['city'] }}空气质量指数(AQI)变化趋势</h4>
+            </div>
+            <div class="row">
+                <div id="pg_content" style="width:90%;height:250%;margin:0 auto"></div>
+            </div>
+        </div>
+        <div class="container-fluid" >
+            <div class="row text-center">
+                <p>下载请扫描下方二维码</p>
+            </div>
+            <div class="row text-center">
+             <img class="img-responsive center-block"" height="40%" width="40%" src="{{ static_url("img/qcode/qcode.png") }}" alt="二维码"/>
+            </div>
+        </div>
+        <script src="{{ static_url("js/echarts.js") }}"></script>
+        <script type="text/javascript">
+         var x_axis = [];
+         {% for i in x %}
+         x_axis.push("{{ i }}");
+         {% end %}
+
+         var myChart = echarts.init(document.getElementById('pg_content'), 'shine'); 
+         var option = {
+             color: ['#e58c65'],
+             tooltip : {
+                 trigger: 'axis'
+             },
+            legend: {
+                left:'center',
+                 right:'center',
+                 data:['AQI指数']
+             },
+             xAxis : [
+                 {
+                     type : 'category',
+                     boundaryGap : false,
+                     data : x_axis,
+                     axisLine: {
+                         lineStyle : {
+                             color: '#d4d4d4'
+                         }
+                     }
+                 }
+             ],
+             yAxis : [
+                 {
+                     type : 'value',
+                     axisLabel : {
+                         formatter: '{value} '
+                     },
+                     axisLine: {
+                         lineStyle : {
+                             color: '#d4d4d4'
+                         }
+                     }
+                 }
+             ],
+             series : [
+                 {
+                     name:'AQI指数',
+                     type:'line',
+                     data:{{ y }}
+                 }
+             ]
+         };   
+         // 为echarts对象加载数据 
+         myChart.setOption(option);
+
+        </script>
+    </body>
+</html>

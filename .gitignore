@@ -87,3 +87,11 @@ ENV/
 
 # Rope project settings
 .ropeproject
+*.conf
+**.ipynb
+notebook/
+**.pyc
+**.DS_Store
+**/.DS_Store
+logs/
+
