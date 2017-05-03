@@ -22,8 +22,6 @@ from common.item import Item
 from handler.BaseHandler import BaseHandler
 from handler.HomeHandler import HomeHandler
 from handler.QCodeHandler import QCodeHandler
-
-from typhoon_weather.crawl_weather import crawlWeather
 from service.QCodeService import QCodeService
 
 # monkey patch

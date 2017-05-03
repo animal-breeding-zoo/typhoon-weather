@@ -27,7 +27,7 @@ class QCodeHandler(BaseHandler):
             for each in hour_data:
                 x.insert(0,each['dateTime'])
                 y.insert(0,each['aqi'])
-            self.render('index.html', w=weather_json, p=pm25_json,x=x,y=y, weather_icon=weather_icon)
-        except:
-            log.error("qcode error")
+            self.render('propagation.html', w=weather_json, p=pm25_json,x=x,y=y, weather_icon=weather_icon)
+        except Exception as e:
+            log.error(e)
             self.render('error.html')
